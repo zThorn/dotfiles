@@ -168,7 +168,6 @@ if [ -f "${HOME}/.gpg-agent-info" ]; then
 fi
 
 export GPG_TTY=$(tty)
-export GPG_TTY=/dev/pts/2
 gpg-connect-agent updatestartuptty /bye
 unset SSH_AGENT_PID
 export SSH_AUTH_SOCK=/run/user/1000/gnupg/S.gpg-agent.ssh
