@@ -1,5 +1,5 @@
 #If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:~/.local/kitty.app/bin:$PATH
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -8,6 +8,9 @@ alias psefg='ps -ef | grep'
 alias whatwas='history | grep'
 alias genpass=openssl base64 -e <<< $(openssl rand -base64 16)
 alias vim=nvim
+
+#I should really look into building a package for this...
+alias updateKitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
 HISTSIZE=10000
