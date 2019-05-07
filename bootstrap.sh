@@ -6,7 +6,7 @@ if [[ $distro == *"Ubuntu"* ]]; then
     distro="ubuntu"
 fi
 
-if [ $distro == "ubuntu" ] then
+if [ $distro == "ubuntu" ]; then
     $pkgmgr software-properties-common
     
     #Add neovim Repository
