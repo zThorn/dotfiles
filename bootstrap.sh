@@ -2,7 +2,7 @@
 distro=$(lsb_release -id -s)
 
 if [[ $distro == *"Ubuntu"* ]]; then
-    pkgmgr="sudo apt-get install -y "
+    pkgmgr="sudo apt-get install -y"
     distro="ubuntu"
 fi
 
@@ -10,28 +10,35 @@ if [ $distro == "ubuntu" ]; then
     $pkgmgr software-properties-common
     
     #Add neovim Repository
-    sudo add-apt-repository ppa:neovim-ppa/stable
+    sudo add-apt-repository -y ppa:neovim-ppa/stable
 
     #Add docker-ce repository
-    sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
 
     #Add docker-ce gpg key
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     
     #Add google source for gsutil
+    CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)"
     echo "deb http://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
 
     #Add google gpg key
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -\n
-    sudo apt-get update
+    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+
+    #Add Yubikey repo
+    sudo add-apt-repository -y ppa:yubico/stable
+
+    #This should have automatically fetched the yubico gpg key, but just in case:
+    sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 32CBA1A9
+    sudo apt-get update -y
 fi
 
 echo "Installing for env: $ubuntu"
 #Install zsh, neovim
 $pkgmgr zsh
 $pkgmgr neovim
-$pkgmgr python3,python3-pip,python3-venv
-$pkgmgr 'gcc-c++'
+$pkgmgr python3 python3-pip python3-venv
+$pkgmgr build-essential
 $pkgmgr golang
 $pkgmgr sshfs
 $pkgmgr pass
@@ -88,4 +95,18 @@ git config --global user.name "Zach Thornton"
 git config --global commit.gpgsign true
 git config --global user.signingkey FB1D591455003C56
 
+#Require Yubikey for inital sign in
 
+if [ $distro == "ubuntu" ]; then
+    $pkgmgr libpam-u2f
+    mkdir ~/.config/Yubico
+    #I've had this fail before in alacritty/kitty, think it has something to
+    #do with $TTY being improperly set
+    pamu2fcfg > ~/.config/Yubico/u2f_keys
+    
+    #Commenting this out for now, I don't trust myself with sed enough to 
+    #assume I've gotten it right on the first shot
+    #sed -e '/@include common-auth/a\' -e 'auth       required   pam_u2f.so' /etc/pam.d/gdm-password
+fi
+
+echo "Completed"
