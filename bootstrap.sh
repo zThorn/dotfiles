@@ -33,7 +33,7 @@ if [ $distro == "ubuntu" ]; then
     sudo apt-get update -y
 fi
 
-echo "Installing for env: $ubuntu"
+echo "Installing for env: $distro"
 #Install zsh, neovim
 $pkgmgr zsh
 $pkgmgr neovim
