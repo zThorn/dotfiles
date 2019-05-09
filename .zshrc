@@ -6,10 +6,11 @@ alias ....='cd ../../..'
 alias bk='cd $OLDPWD'
 alias psefg='ps -ef | grep'
 alias whatwas='history | grep'
-alias genpass=openssl base64 -e <<< $(openssl rand -base64 16)
+alias genpass=openssl base64 -e <<< $(openssl rand -base64 33)
 alias vim=nvim
 
 #I should really look into building a package for this...
+#Having to pipe this to stdin is pretty yikes tbh
 alias updateKitty='curl -L https://sw.kovidgoyal.net/kitty/installer.sh | sh /dev/stdin'
 # Path to your oh-my-zsh installation.
 export ZSH=~/.oh-my-zsh
@@ -63,7 +64,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git brew mvn osx pip python screen sublime sudo web-search)
+plugins=(git pip python screen sudo)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -72,7 +73,7 @@ source $ZSH/oh-my-zsh.sh
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
-# export LANG=en_US.UTF-8
+export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
  if [[ -n $SSH_CONNECTION ]]; then
@@ -163,7 +164,7 @@ ZSH_THEME_GIT_PROMPT_SUFFIX="› %f"
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
-#Needed for Yubikey
+#Needed to use Yubikey for SSH/GPG signing
 if [ -f "${HOME}/.gpg-agent-info" ]; then
   . "${HOME}/.gpg-agent-info"
   export GPG_AGENT_INFO
